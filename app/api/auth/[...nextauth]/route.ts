@@ -5,16 +5,16 @@ import { getServerSession } from "next-auth";
 // Force Node.js runtime
 export const runtime = "nodejs";
 
-// Re-export NextAuth handlers for this route
-export const { GET, POST } = handlers;
+// Re-export standard NextAuth handlers
+export const { POST } = handlers;
 
-// Optional: if you want custom session check logic
-export async function customGET(request: Request, { params }: { params: { id: string } }) {
-  const session = await getServerSession(); // you can pass handlers or config if needed
+// Custom GET logic
+export async function GET(request: Request, { params }: { params: { id: string } }) {
+  const session = await getServerSession(); // pass config if needed
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }
 
-  // Your custom logic here...
+  // Your custom logic here
   return new Response(`Password ID: ${params.id}`, { status: 200 });
 }
