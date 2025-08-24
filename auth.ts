@@ -2,7 +2,7 @@
 
 import * as z from "zod";
 import bcrypt from "bcryptjs";
-import { signIn } from "next-auth/react"; // <-- Fixed import
+import { signIn } from "@/auth"; // <-- Corrected import
 import { LoginSchema } from "@/schemas";
 import { getUserByEmail } from "@/data/user";
 import { sendVerificationEmail } from "@/lib/mail";
