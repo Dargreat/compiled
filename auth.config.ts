@@ -39,13 +39,8 @@ const authConfig: NextAuthConfig = {
         const isValid = await bcryptjs.compare(password, user.password);
         if (!isValid) return null;
 
-        // Must return a plain object
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name ?? null,
-          role: user.role ?? "USER",
-        };
+        // ✅ Return the actual Prisma user (matches User type)
+        return user;
       },
     }),
   ],
