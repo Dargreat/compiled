@@ -1,125 +1,68 @@
-import NextAuth from "next-auth";
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import authConfig from "@/auth.config";
-import { getUserById } from "@/data/user";
-import db from "@/lib/db";
-import { UserRole } from "@prisma/client";
+"use server";
 
-const ADMIN_EMAILS = ["aminofab@gmail.com", "eminselimaslan@gmail.com"];
-const isAdminEmail = (email?: string | null) =>
-  ADMIN_EMAILS.includes(email?.toLowerCase() ?? "");
+import * as z from "zod";
+import bcrypt from "bcryptjs";
+import { signIn } from "next-auth/react"; // <-- Fixed import
+import { LoginSchema } from "@/schemas";
+import { getUserByEmail } from "@/data/user";
+import { sendVerificationEmail } from "@/lib/mail";
+import { generateVerificationToken } from "@/lib/token";
+import { redirect } from "next/navigation";
 
-// Create the auth configuration
-export const authOptions = {
-  pages: {
-    signIn: "/auth/login",
-    error: "/auth/error",
-  },
-  adapter: PrismaAdapter(db),
-  session: { strategy: "jwt" },
-  events: {
-    async linkAccount({ user, account, profile }) {
-      if (account?.provider === "google" || account?.provider === "github") {
-        const email = profile?.email?.toLowerCase();
-        const isAdmin = isAdminEmail(email);
-
-        const updateData: any = {
-          emailVerified: new Date(),
-          role: isAdmin ? UserRole.ADMIN : UserRole.USER,
-        };
-
-        if (profile?.name) {
-          const [firstName, ...lastNameParts] = profile.name.split(" ");
-          updateData.firstName = firstName;
-          updateData.lastName = lastNameParts.join(" ");
-        }
-        if (email) updateData.email = email;
-        if (profile?.image) updateData.image = profile.image;
-
-        try {
-          await db.user.update({
-            where: { id: user.id },
-            data: updateData,
-          });
-        } catch (error) {
-          console.error("Error updating user in linkAccount:", error);
-        }
-      }
-    },
-  },
-  callbacks: {
-    async signIn({ user, account }) {
-      if (!user.email) return false;
-
-      if (account?.provider !== "credentials") {
-        if (isAdminEmail(user.email) && user.id) {
-          await db.user.update({
-            where: { id: user.id },
-            data: { role: UserRole.ADMIN },
-          });
-        }
-        return true;
-      }
-
-      const existingUser = await getUserById(user.id ?? "");
-      if (!existingUser?.emailVerified) return false;
-
-      if (
-        isAdminEmail(existingUser.email) &&
-        existingUser.role !== UserRole.ADMIN
-      ) {
-        await db.user.update({
-          where: { id: user.id },
-          data: { role: UserRole.ADMIN },
-        });
-      }
-      return true;
-    },
-    async session({ token, session }) {
-      if (token.sub && session.user) {
-        session.user.id = token.sub;
-        session.user.name = token.name as string;
-        session.user.firstName = token.firstName as string;
-        session.user.lastName = token.lastName as string;
-        session.user.email = token.email as string;
-        session.user.role = token.role as UserRole;
-        session.user.image = token.picture as string;
-        session.user.emailVerified = token.emailVerified as Date | null;
-      }
-      return session;
-    },
-    async jwt({ token }) {
-      if (!token.sub) return token;
-      const existingUser = await getUserById(token.sub);
-      if (!existingUser) return token;
-
-      if (
-        isAdminEmail(existingUser.email) &&
-        existingUser.role !== UserRole.ADMIN
-      ) {
-        await db.user.update({
-          where: { id: existingUser.id },
-          data: { role: UserRole.ADMIN },
-        });
-        existingUser.role = UserRole.ADMIN;
-      }
-
-      token.name = `${existingUser.firstName || ""} ${existingUser.lastName || ""}`.trim();
-      token.firstName = existingUser.firstName;
-      token.lastName = existingUser.lastName;
-      token.email = existingUser.email;
-      token.role = existingUser.role;
-      token.picture = existingUser.image;
-      token.emailVerified = existingUser.emailVerified;
-
-      return token;
-    },
-  },
-  ...authConfig,
+const ERROR_MESSAGES = {
+  INVALID_FIELDS: "Invalid fields!",
+  EMAIL_NOT_EXIST: "Email does not exist!",
+  CONFIRMATION_EMAIL_SENT: "Confirmation email sent!",
+  INVALID_CREDENTIALS: "Invalid credentials!",
+  SOMETHING_WENT_WRONG: "Something went wrong!",
 };
 
-// Edge-compatible handler
-const handler = NextAuth(authOptions);
+export const login = async (
+  values: z.infer<typeof LoginSchema>,
+  callbackUrl?: string | null
+) => {
+  // Validate input
+  const validatedFields = LoginSchema.safeParse(values);
+  if (!validatedFields.success) {
+    return { error: ERROR_MESSAGES.INVALID_FIELDS };
+  }
 
-// ✅ Exports to fix previous import errors
-export { handler as GET, handler as POST, handler as auth, handler as handlers };
+  const { email, password } = validatedFields.data;
+
+  // Get user by email
+  const existingUser = await getUserByEmail(email);
+  if (!existingUser || !existingUser.email || !existingUser.password) {
+    return { error: ERROR_MESSAGES.EMAIL_NOT_EXIST };
+  }
+
+  // Check email verification
+  if (!existingUser.emailVerified) {
+    const verificationToken = await generateVerificationToken(existingUser.email);
+    await sendVerificationEmail(verificationToken.email, verificationToken.token);
+    return { success: ERROR_MESSAGES.CONFIRMATION_EMAIL_SENT };
+  }
+
+  // Verify password
+  const passwordMatch = await bcrypt.compare(password, existingUser.password);
+  if (!passwordMatch) {
+    return { error: ERROR_MESSAGES.INVALID_CREDENTIALS };
+  }
+
+  // Attempt sign-in
+  try {
+    const result = await signIn("credentials", {
+      email,
+      password,
+      redirect: false, // Prevent automatic redirect
+    });
+
+    if (result?.error) {
+      return { error: ERROR_MESSAGES.INVALID_CREDENTIALS };
+    }
+
+    // Redirect after successful login
+    redirect(callbackUrl || "/");
+  } catch (error) {
+    return { error: ERROR_MESSAGES.SOMETHING_WENT_WRONG };
+  }
+};
