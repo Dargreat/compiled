@@ -2,7 +2,6 @@
 
 import * as z from "zod";
 import bcrypt from "bcryptjs";
-import { AuthError } from "next-auth";
 import { signIn } from "@/auth";
 import { LoginSchema } from "@/schemas";
 import { getUserByEmail } from "@/data/user";
@@ -44,23 +43,20 @@ export const login = async (values: z.infer<typeof LoginSchema>, callbackUrl?: s
   }
 
   try {
-    await signIn("credentials", { 
+    const result = await signIn("credentials", { 
       email, 
       password,
       redirect: false, // Prevent automatic redirect
     });
-    
+
+    if (!result || !result.ok) {
+      return { error: result?.error || ERROR_MESSAGES.SOMETHING_WENT_WRONG };
+    }
+
     // If login is successful, redirect to the dashboard
     redirect(callbackUrl || "/");
   } catch (error) {
-    if (error instanceof AuthError) {
-      switch (error.type) {
-        case "CredentialsSignin":
-          return { error: ERROR_MESSAGES.INVALID_CREDENTIALS };
-        default:
-          return { error: ERROR_MESSAGES.SOMETHING_WENT_WRONG };
-      }
-    }
-    throw error;
+    // Generic fallback
+    return { error: ERROR_MESSAGES.SOMETHING_WENT_WRONG };
   }
 };
