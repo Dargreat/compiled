@@ -1,4 +1,3 @@
-// tracker/page.tsx
 "use client";
 
 import Link from "next/link";
@@ -11,7 +10,6 @@ const Index = () => {
   const { subreddits, isLoading, hasSearched, searchSubreddits } = useRedditSearch();
 
   return (
-    // Add a wrapper div with theme classes to ensure proper context
     <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
       <header className="bg-card border-b border-border/50 shadow-sm">
@@ -33,7 +31,7 @@ const Index = () => {
           {/* Search Bar */}
           <SearchBar onSearch={searchSubreddits} isLoading={isLoading} />
 
-          {/* 🏠 Home Button */}
+          {/* Home Button */}
           <div className="mt-6 text-center">
             <Link
               href="/"
@@ -83,9 +81,7 @@ const Index = () => {
                 {isLoading ? (
                   "Searching subreddits..."
                 ) : subreddits.length > 0 ? (
-                  `Found ${subreddits.length} subreddit${
-                    subreddits.length !== 1 ? "s" : ""
-                  }`
+                  `Found ${subreddits.length} subreddit${subreddits.length !== 1 ? "s" : ""}`
                 ) : (
                   "No subreddits found"
                 )}
