@@ -46,17 +46,22 @@ export const login = async (values: z.infer<typeof LoginSchema>, callbackUrl?: s
     const result = await signIn("credentials", { 
       email, 
       password,
-      redirect: false, // Prevent automatic redirect
+      redirect: false, // Prevents automatic redirect
     });
 
-    if (!result || !result.ok) {
+    // The redirect will not be reached if the sign-in fails
+    // or if the `signIn` call itself throws an error.
+    if (result && !result.ok) {
       return { error: result?.error || ERROR_MESSAGES.SOMETHING_WENT_WRONG };
     }
 
-    // If login is successful, redirect to the dashboard
-    redirect(callbackUrl || "/");
   } catch (error) {
-    // Generic fallback
+    // This catch block will only handle other unexpected errors.
+    console.error("Login failed:", error);
     return { error: ERROR_MESSAGES.SOMETHING_WENT_WRONG };
   }
+  
+  // 🔑 Key Fix: The redirect should happen here, outside the try/catch.
+  // This ensures the redirect error is not caught and is handled by Next.js.
+  redirect(callbackUrl || "/");
 };
