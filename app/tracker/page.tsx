@@ -15,8 +15,9 @@ const Index = () => {
       <header className="bg-card border-b border-border/50 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 py-6">
           <div className="flex items-center justify-center space-x-3 mb-8">
+            {/* Icon beside header - now red */}
             <div className="p-3 bg-gradient-primary rounded-full shadow-search">
-              <MessageSquare className="w-8 h-8 text-primary-foreground" />
+              <MessageSquare className="w-8 h-8 text-red-600" />
             </div>
             <div className="text-center">
               <h1 className="text-3xl font-bold text-foreground">
@@ -31,11 +32,11 @@ const Index = () => {
           {/* Search Bar */}
           <SearchBar onSearch={searchSubreddits} isLoading={isLoading} />
 
-          {/* 🏠 Home Button */}
+          {/* 🏠 Home Button - now red */}
           <div className="mt-6 text-center">
             <Link
               href="/"
-              className="inline-block px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/80 transition"
+              className="inline-block px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition"
             >
               Home
             </Link>
@@ -73,9 +74,9 @@ const Index = () => {
           </div>
         )}
 
-        {/* Results */}
+        {/* Results - light pink background section */}
         {hasSearched && (
-          <div>
+          <div className="bg-pink-50 p-6 rounded-2xl">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-semibold text-foreground">
                 {isLoading ? (
@@ -93,10 +94,9 @@ const Index = () => {
             {subreddits.length > 0 && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {subreddits.map((subreddit) => (
-                  <SubredditCard
-                    key={subreddit.display_name}
-                    subreddit={subreddit}
-                  />
+                  <div key={subreddit.display_name} className="bg-white rounded-xl shadow p-4">
+                    <SubredditCard subreddit={subreddit} />
+                  </div>
                 ))}
               </div>
             )}
