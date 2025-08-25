@@ -10,7 +10,7 @@ const Index = () => {
   const { subreddits, isLoading, hasSearched, searchSubreddits } = useRedditSearch();
 
   return (
-    <div className="min-h-screen">
+    <>
       {/* Header */}
       <header className="bg-card border-b border-border/50 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 py-6">
@@ -103,7 +103,7 @@ const Index = () => {
           </div>
         )}
       </main>
-    </div>
+    </>
   );
 };
 
