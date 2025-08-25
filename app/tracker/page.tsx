@@ -12,10 +12,10 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
-      <header className="bg-card border-b border-border/50 shadow-sm">
+      <header className="bg-card border-b border-border shadow-sm">
         <div className="max-w-6xl mx-auto px-4 py-6">
           <div className="flex items-center justify-center space-x-3 mb-8">
-            <div className="p-3 bg-gradient-to-r from-primary to-blue-600 rounded-full shadow-md">
+            <div className="p-3 bg-gradient-to-r from-primary to-primary/80 rounded-full shadow-md">
               <MessageSquare className="w-8 h-8 text-primary-foreground" />
             </div>
             <div className="text-center">
@@ -48,7 +48,7 @@ const Index = () => {
         {!hasSearched && (
           <div className="text-center py-16">
             <div className="max-w-2xl mx-auto">
-              <div className="p-6 bg-card rounded-2xl shadow-md border border-border/50 mb-8">
+              <div className="p-6 bg-card rounded-2xl shadow-md border border-border mb-8">
                 <SearchIcon className="w-16 h-16 text-primary mx-auto mb-4" />
                 <h2 className="text-2xl font-semibold text-foreground mb-3">
                   Find Your Community
