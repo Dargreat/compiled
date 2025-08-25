@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google"; // only Google-supported fonts
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 
@@ -20,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} antialiased`}>
+      <body className={`${inter.variable} antialiased bg-background text-foreground`}>
         <Toaster />
         {children}
       </body>
