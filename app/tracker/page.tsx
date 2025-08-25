@@ -71,9 +71,9 @@ const Index = () => {
           </div>
         )}
 
-        {/* Results - now uses the 'bg-card' from your theme */}
+        {/* Results section */}
         {hasSearched && (
-          <div className="p-6 bg-card rounded-2xl shadow-lg">
+          <div className="p-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-semibold text-foreground">
                 {isLoading ? (
