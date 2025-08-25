@@ -25,27 +25,12 @@ const Index = () => {
           </div>
 
           {/* Search Bar */}
-          <SearchBar 
-            onSearch={searchSubreddits} 
-            isLoading={isLoading} 
-            style={{
-              width: "100%",
-              maxWidth: "32rem",
-              margin: "0 auto",
-            }}
-            buttonStyle={{
-              backgroundColor: "#ef4444",
-              color: "#fff",
-              border: "none",
-              padding: "0.5rem 1rem",
-              borderRadius: "0.5rem",
-            }}
-          />
+          <SearchBar onSearch={searchSubreddits} isLoading={isLoading} />
 
           {/* Home Button */}
           <div style={{ marginTop: "1.5rem", textAlign: "center" }}>
-            <Link 
-              href="/" 
+            <Link
+              href="/"
               style={{
                 display: "inline-block",
                 padding: "0.5rem 1rem",
@@ -66,7 +51,16 @@ const Index = () => {
         {!hasSearched && (
           <div style={{ textAlign: "center", padding: "4rem 0" }}>
             <div style={{ maxWidth: "32rem", margin: "0 auto" }}>
-              <div style={{ padding: "1.5rem", backgroundColor: "#fff", borderRadius: "1rem", boxShadow: "0 2px 6px rgba(0,0,0,0.1)", border: "1px solid rgba(0,0,0,0.1)", marginBottom: "2rem" }}>
+              <div
+                style={{
+                  padding: "1.5rem",
+                  backgroundColor: "#fff",
+                  borderRadius: "1rem",
+                  boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+                  border: "1px solid rgba(0,0,0,0.1)",
+                  marginBottom: "2rem",
+                }}
+              >
                 <SearchIcon style={{ width: "4rem", height: "4rem", color: "#ef4444", margin: "0 auto 1rem auto" }} />
                 <h2 style={{ fontSize: "1.5rem", fontWeight: "600", marginBottom: "0.75rem", color: "#000" }}>Find Your Community</h2>
                 <p style={{ color: "#333", lineHeight: "1.5", marginBottom: "1.5rem" }}>
@@ -94,20 +88,27 @@ const Index = () => {
           <div>
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "1.5rem" }}>
               <h2 style={{ fontSize: "1.25rem", fontWeight: "600", color: "#000" }}>
-                {isLoading ? (
-                  "Searching subreddits..."
-                ) : subreddits.length > 0 ? (
-                  `Found ${subreddits.length} subreddit${subreddits.length !== 1 ? "s" : ""}`
-                ) : (
-                  "No subreddits found"
-                )}
+                {isLoading
+                  ? "Searching subreddits..."
+                  : subreddits.length > 0
+                  ? `Found ${subreddits.length} subreddit${subreddits.length !== 1 ? "s" : ""}`
+                  : "No subreddits found"}
               </h2>
             </div>
 
             {subreddits.length > 0 && (
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "1.5rem" }}>
                 {subreddits.map((subreddit) => (
-                  <div key={subreddit.display_name} style={{ backgroundColor: "#fff", borderRadius: "1rem", padding: "1rem", boxShadow: "0 2px 6px rgba(0,0,0,0.1)", border: "1px solid rgba(0,0,0,0.1)" }}>
+                  <div
+                    key={subreddit.display_name}
+                    style={{
+                      backgroundColor: "#fff",
+                      borderRadius: "1rem",
+                      padding: "1rem",
+                      boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+                      border: "1px solid rgba(0,0,0,0.1)",
+                    }}
+                  >
                     <SubredditCard subreddit={subreddit} visitButtonStyle={{ backgroundColor: "#ef4444", color: "#fff", border: "none" }} />
                   </div>
                 ))}
