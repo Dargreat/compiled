@@ -1,3 +1,4 @@
+// tracker/page.tsx
 "use client";
 
 import Link from "next/link";
@@ -10,12 +11,13 @@ const Index = () => {
   const { subreddits, isLoading, hasSearched, searchSubreddits } = useRedditSearch();
 
   return (
-    <>
+    // Add a wrapper div with theme classes to ensure proper context
+    <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
       <header className="bg-card border-b border-border/50 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 py-6">
           <div className="flex items-center justify-center space-x-3 mb-8">
-            <div className="p-3 bg-gradient-primary rounded-full shadow-search">
+            <div className="p-3 bg-gradient-to-r from-primary to-blue-600 rounded-full shadow-md">
               <MessageSquare className="w-8 h-8 text-primary-foreground" />
             </div>
             <div className="text-center">
@@ -35,7 +37,7 @@ const Index = () => {
           <div className="mt-6 text-center">
             <Link
               href="/"
-              className="inline-block px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/80 transition"
+              className="inline-block px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
             >
               Home
             </Link>
@@ -48,7 +50,7 @@ const Index = () => {
         {!hasSearched && (
           <div className="text-center py-16">
             <div className="max-w-2xl mx-auto">
-              <div className="p-6 bg-card rounded-2xl shadow-card border border-border/50 mb-8">
+              <div className="p-6 bg-card rounded-2xl shadow-md border border-border/50 mb-8">
                 <SearchIcon className="w-16 h-16 text-primary mx-auto mb-4" />
                 <h2 className="text-2xl font-semibold text-foreground mb-3">
                   Find Your Community
@@ -103,7 +105,7 @@ const Index = () => {
           </div>
         )}
       </main>
-    </>
+    </div>
   );
 };
 
