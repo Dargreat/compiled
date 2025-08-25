@@ -8,6 +8,7 @@ import type { DefaultSession, Account, Profile, User as NextAuthUser } from "nex
 import type { JWT } from "next-auth/jwt";
 import type { Adapter } from "@auth/core/adapters";
 
+// Augment the 'next-auth' and 'next-auth/jwt' modules
 declare module "next-auth" {
   interface User {
     role: UserRole;
@@ -35,6 +36,17 @@ declare module "next-auth/jwt" {
   }
 }
 
+// Add this new module augmentation to define the custom fields for the adapter
+declare module "@auth/core/adapters" {
+  interface AdapterUser {
+    role: UserRole;
+    firstName?: string | null;
+    lastName?: string | null;
+    emailVerified?: Date | null;
+    isTwoFactorEnabled?: boolean;
+  }
+}
+
 const ADMIN_EMAILS = ["aminofab@gmail.com", "eminselimaslan@gmail.com"];
 const isAdminEmail = (email?: string | null) =>
   ADMIN_EMAILS.includes(email?.toLowerCase() ?? "");
@@ -49,6 +61,8 @@ export const {
     signIn: "/auth/login",
     error: "/auth/error",
   },
+  // Ensure that all adapters are using the same type definition.
+  // Casting is a temporary fix, but augmenting the AdapterUser is the proper solution.
   adapter: PrismaAdapter(db) as Adapter,
   session: { strategy: "jwt" },
   events: {
