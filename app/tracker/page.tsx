@@ -6,6 +6,8 @@ import { SubredditCard } from "@/components/SubredditCard";
 import { useRedditSearch } from "@/hooks/useRedditSearch";
 import { MessageSquare, TrendingUp, Search as SearchIcon } from "lucide-react";
 
+// The pink background is now applied to the whole main content area below the header.
+// This is done by adding 'bg-pink-50' to the <main> element.
 const Index = () => {
   const { subreddits, isLoading, hasSearched, searchSubreddits } = useRedditSearch();
 
@@ -44,8 +46,8 @@ const Index = () => {
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="max-w-6xl mx-auto px-4 py-8">
+      {/* Main Content with a light pink background */}
+      <main className="min-h-[calc(100vh-176px)] max-w-6xl mx-auto px-4 py-8 bg-pink-50">
         {!hasSearched && (
           <div className="text-center py-16">
             <div className="max-w-2xl mx-auto">
@@ -74,9 +76,9 @@ const Index = () => {
           </div>
         )}
 
-        {/* Results - light pink background section */}
+        {/* Results section */}
         {hasSearched && (
-          <div className="bg-pink-50 p-6 rounded-2xl">
+          <div className="p-6 rounded-2xl">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-semibold text-foreground">
                 {isLoading ? (
