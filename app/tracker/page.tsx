@@ -6,20 +6,18 @@ import { SubredditCard } from "@/components/SubredditCard";
 import { useRedditSearch } from "@/hooks/useRedditSearch";
 import { MessageSquare, TrendingUp, Search as SearchIcon } from "lucide-react";
 
-// The pink background is now applied to the whole main content area below the header.
-// This is done by adding 'bg-pink-50' to the <main> element.
 const Index = () => {
   const { subreddits, isLoading, hasSearched, searchSubreddits } = useRedditSearch();
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
       <header className="bg-card border-b border-border/50 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 py-6">
           <div className="flex items-center justify-center space-x-3 mb-8">
-            {/* Icon beside header - now red */}
-            <div className="p-3 bg-gradient-primary rounded-full shadow-search">
-              <MessageSquare className="w-8 h-8 text-red-600" />
+            {/* Icon beside header */}
+            <div className="p-3 bg-primary rounded-full shadow-md">
+              <MessageSquare className="w-8 h-8 text-primary-foreground" />
             </div>
             <div className="text-center">
               <h1 className="text-3xl font-bold text-foreground">
@@ -34,20 +32,17 @@ const Index = () => {
           {/* Search Bar */}
           <SearchBar onSearch={searchSubreddits} isLoading={isLoading} />
 
-          {/* 🏠 Home Button - now red */}
+          {/* Home Button - Now uses your global 'btn' class */}
           <div className="mt-6 text-center">
-            <Link
-              href="/"
-              className="inline-block px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition"
-            >
+            <Link href="/" className="btn">
               Home
             </Link>
           </div>
         </div>
       </header>
 
-      {/* Main Content with a light pink background */}
-      <main className="min-h-[calc(100vh-176px)] max-w-6xl mx-auto px-4 py-8 bg-pink-50">
+      {/* Main Content */}
+      <main className="max-w-6xl mx-auto px-4 py-8">
         {!hasSearched && (
           <div className="text-center py-16">
             <div className="max-w-2xl mx-auto">
@@ -76,9 +71,9 @@ const Index = () => {
           </div>
         )}
 
-        {/* Results section */}
+        {/* Results - now uses the 'bg-card' from your theme */}
         {hasSearched && (
-          <div className="p-6 rounded-2xl">
+          <div className="p-6 bg-card rounded-2xl shadow-lg">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-semibold text-foreground">
                 {isLoading ? (
@@ -96,7 +91,7 @@ const Index = () => {
             {subreddits.length > 0 && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {subreddits.map((subreddit) => (
-                  <div key={subreddit.display_name} className="bg-white rounded-xl shadow p-4">
+                  <div key={subreddit.display_name} className="bg-card rounded-xl shadow p-4">
                     <SubredditCard subreddit={subreddit} />
                   </div>
                 ))}
