@@ -25,24 +25,37 @@ body,
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
   --color-ring: var(--ring);
-
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -54,109 +67,68 @@ body,
 --------------------------------*/
 @layer base {
   :root {
-    /* Light mode */
-    --background: 340 100% 98%;   /* very light pink */
-    --foreground: 340 80% 20%;    /* dark red text */
-
-    --card: 340 100% 95%;         /* slightly darker pink */
-    --card-foreground: 340 80% 20%;
-
+    /* Light mode - Pink theme */
+    --background: 340 100% 98%;         /* Very light pink */
+    --foreground: 340 80% 10%;          /* Dark reddish text */
+    --card: 340 100% 95%;               /* Slightly darker pink */
+    --card-foreground: 340 80% 10%;
     --popover: 340 100% 95%;
-    --popover-foreground: 340 80% 20%;
-
-    --primary: 0 80% 50%;         /* bright red buttons */
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 340 80% 90%;
-    --secondary-foreground: 340 80% 20%;
-
-    --muted: 340 80% 92%;
-    --muted-foreground: 340 80% 20%;
-
-    --accent: 340 80% 90%;
-    --accent-foreground: 340 80% 20%;
-
-    --destructive: 0 80% 50%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 340 80% 90%;
-    --input: 340 80% 90%;
-    --ring: 0 80% 50%;
-
+    --popover-foreground: 340 80% 10%;
+    --primary: 350 70% 50%;             /* Red buttons/accents */
+    --primary-foreground: 340 100% 98%;
+    --secondary: 340 100% 90%;
+    --secondary-foreground: 340 70% 50%;
+    --muted: 340 100% 90%;
+    --muted-foreground: 340 50% 30%;
+    --accent: 340 100% 90%;
+    --accent-foreground: 340 70% 50%;
+    --destructive: 0 84% 60%;           /* Error/destructive red */
+    --destructive-foreground: 340 100% 98%;
+    --border: 340 90% 85%;
+    --input: 340 90% 85%;
+    --ring: 340 70% 50%;
     --radius: 0.5rem;
   }
 
+  /* Dark mode */
   .dark {
-    /* Dark mode */
-    --background: 340 80% 15%;
-    --foreground: 340 100% 98%;
-
-    --card: 340 80% 25%;
+    --background: 340 30% 15%;          /* Dark pinkish background */
+    --foreground: 340 100% 98%;         /* Light text */
+    --card: 340 40% 25%;                /* Darker cards */
     --card-foreground: 340 100% 98%;
-
-    --popover: 340 80% 25%;
+    --popover: 340 40% 25%;
     --popover-foreground: 340 100% 98%;
-
-    --primary: 0 80% 50%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 340 70% 30%;
+    --primary: 350 80% 60%;             /* Brighter red buttons */
+    --primary-foreground: 340 30% 15%;
+    --secondary: 340 25% 20%;
     --secondary-foreground: 340 100% 98%;
-
-    --muted: 340 70% 30%;
-    --muted-foreground: 340 90% 95%;
-
-    --accent: 340 70% 30%;
+    --muted: 340 25% 20%;
+    --muted-foreground: 340 50% 60%;
+    --accent: 340 25% 20%;
     --accent-foreground: 340 100% 98%;
-
-    --destructive: 0 80% 50%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 340 70% 25%;
-    --input: 340 70% 25%;
-    --ring: 0 80% 50%;
+    --destructive: 0 65% 35%;
+    --destructive-foreground: 340 100% 98%;
+    --border: 340 25% 20%;
+    --input: 340 25% 20%;
+    --ring: 340 70% 50%;
   }
+}
 
-  /* -------------------------------
-     Base layer styling
-  --------------------------------*/
+/* -------------------------------
+   Base layer overrides
+--------------------------------*/
+@layer base {
   body {
-    @apply bg-background text-foreground transition-colors duration-300;
+    @apply bg-background text-foreground;
   }
 
+  /* Buttons */
   button {
-    @apply bg-primary text-primary-foreground rounded px-4 py-2 font-semibold
-           transition-colors duration-200 ease-in-out;
+    @apply bg-primary text-primary-foreground rounded-md px-4 py-2 hover:brightness-90 transition;
   }
 
-  button:hover {
-    @apply brightness-90;
-  }
-
-  button:active {
-    @apply brightness-75;
-  }
-
-  input, textarea {
-    @apply bg-card text-card-foreground rounded px-3 py-2 border border-border
-           focus:outline-none focus:ring-2 focus:ring-primary
-           transition-colors duration-200;
-  }
-
+  /* Cards */
   .card {
-    @apply bg-card text-card-foreground rounded p-4 shadow-md
-           transition-shadow duration-200;
-  }
-
-  .card:hover {
-    @apply shadow-xl;
-  }
-
-  .popover {
-    @apply bg-popover text-popover-foreground rounded p-3 shadow-lg;
-  }
-
-  a {
-    @apply text-primary hover:underline;
+    @apply bg-card text-card-foreground rounded-lg p-4 shadow;
   }
 }
