@@ -12,8 +12,6 @@ html,
 body,
 :root {
   height: 100%;
-  margin: 0;
-  padding: 0;
 }
 
 /* -------------------------------
@@ -29,6 +27,7 @@ body,
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -37,11 +36,13 @@ body,
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar: var(--sidebar);
+
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -58,6 +59,7 @@ body,
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -65,26 +67,34 @@ body,
 }
 
 /* -------------------------------
-   Light/Dark HSL Variables
+   Base: HSL fallback
 --------------------------------*/
 @layer base {
   :root {
-    --background: 340 100% 98%;         /* Very light pink */
-    --foreground: 340 80% 10%;          /* Dark reddish text */
+    --background: 340 100% 98%;         /* Light pink */
+    --foreground: 340 80% 10%;          /* Dark red text */
+
     --card: 340 100% 95%;               /* Slightly darker pink */
     --card-foreground: 340 80% 10%;
+
     --popover: 340 100% 95%;
     --popover-foreground: 340 80% 10%;
-    --primary: 350 70% 50%;             /* Red buttons/accents */
+
+    --primary: 350 70% 50%;             /* Red buttons */
     --primary-foreground: 340 100% 98%;
+
     --secondary: 340 100% 90%;
     --secondary-foreground: 340 70% 50%;
+
     --muted: 340 100% 90%;
     --muted-foreground: 340 50% 30%;
+
     --accent: 340 100% 90%;
     --accent-foreground: 340 70% 50%;
-    --destructive: 0 84% 60%;           /* Error/destructive red */
+
+    --destructive: 0 84% 60%;
     --destructive-foreground: 340 100% 98%;
+
     --border: 340 90% 85%;
     --input: 340 90% 85%;
     --ring: 340 70% 50%;
@@ -92,22 +102,30 @@ body,
   }
 
   .dark {
-    --background: 340 30% 15%;          /* Dark pinkish background */
-    --foreground: 340 80% 10%;          /* Keep text dark red */
-    --card: 340 40% 25%;                /* Darker cards */
-    --card-foreground: 340 80% 10%;
+    --background: 340 30% 15%;
+    --foreground: 340 100% 98%;
+
+    --card: 340 40% 25%;
+    --card-foreground: 340 100% 98%;
+
     --popover: 340 40% 25%;
-    --popover-foreground: 340 80% 10%;
-    --primary: 350 70% 50%;             /* Red buttons still */
-    --primary-foreground: 340 100% 98%;
+    --popover-foreground: 340 100% 98%;
+
+    --primary: 350 80% 60%;
+    --primary-foreground: 340 30% 15%;
+
     --secondary: 340 25% 20%;
-    --secondary-foreground: 340 80% 10%;
+    --secondary-foreground: 340 100% 98%;
+
     --muted: 340 25% 20%;
-    --muted-foreground: 340 50% 30%;
+    --muted-foreground: 340 50% 60%;
+
     --accent: 340 25% 20%;
-    --accent-foreground: 340 80% 10%;
+    --accent-foreground: 340 100% 98%;
+
     --destructive: 0 65% 35%;
     --destructive-foreground: 340 100% 98%;
+
     --border: 340 25% 20%;
     --input: 340 25% 20%;
     --ring: 340 70% 50%;
@@ -115,86 +133,225 @@ body,
 }
 
 /* -------------------------------
-   Base layer overrides
+   Primary: OKLCH variables
 --------------------------------*/
-@layer base {
-  * {
-    box-sizing: border-box;
-  }
+:root {
+  --radius: 0.625rem;
 
-  body {
-    @apply bg-background text-foreground font-sans;
-  }
+  --background: oklch(0.98 0.03 340);
+  --foreground: oklch(0.145 0 0);
 
-  /* -------------------------------
-     Buttons
-  --------------------------------*/
-  button {
-    background-color: hsl(350, 70%, 50%) !important;
-    color: hsl(340, 100%, 98%) !important;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    border: none;
-  }
+  --card: oklch(0.95 0.02 340);
+  --card-foreground: oklch(0.145 0 0);
 
-  button:hover {
-    background-color: hsl(350, 70%, 40%) !important;
-  }
+  --popover: oklch(0.95 0.02 340);
+  --popover-foreground: oklch(0.145 0 0);
 
-  /* Special white buttons */
-  .btn-white {
-    background-color: hsl(0, 0%, 100%) !important;
-    color: hsl(340, 80%, 10%) !important;
-    border: 1px solid hsl(340, 90%, 85%);
-  }
+  --primary: oklch(0.5 0.2 350);
+  --primary-foreground: oklch(0.98 0 0);
 
-  .btn-white:hover {
-    background-color: hsl(340, 100%, 95%) !important;
-  }
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.5 0 0);
 
-  /* Cards */
-  .card {
-    background-color: hsl(340, 100%, 95%);
-    color: hsl(340, 80%, 10%);
-    border-radius: 0.5rem;
-    padding: 1rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  }
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.55 0 0);
 
-  /* Inputs */
-  input,
-  textarea,
-  select {
-    background-color: hsl(340, 100%, 98%);
-    color: hsl(340, 80%, 10%);
-    border: 1px solid hsl(340, 90%, 85%);
-    border-radius: 0.5rem;
-    padding: 0.5rem;
-  }
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.5 0 0);
 
-  input:focus,
-  textarea:focus,
-  select:focus {
-    outline: none;
-    border-color: hsl(350, 70%, 50%);
-  }
+  --destructive: oklch(0.577 0.245 27.325);
 
-  /* Links */
-  a {
-    color: hsl(340, 50%, 20%);
-    text-decoration: underline;
-    transition: color 0.2s;
-  }
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
 
-  a:hover {
-    color: hsl(350, 70%, 50%);
-  }
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
 
-  /* Tracker page background */
-  .tracker-page {
-    background-color: hsl(340, 100%, 98%);
-  }
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
 }
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+
+  --destructive: oklch(0.704 0.191 22.216);
+
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.269 0 0);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+/* -------------------------------
+   Buttons and special cases
+--------------------------------*/
+button {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  border-radius: var(--radius);
+  transition: background-color 0.2s ease;
+}
+
+button.white {
+  background-color: #fff;
+  color: var(--foreground);
+}
+
+button:hover {
+  background-color: hsl(350 70% 45%);
+}
+
+button.white:hover {
+  background-color: #f2f2f2;
+}
+
+/* -------------------------------
+   Forms, inputs, links
+--------------------------------*/
+input,
+textarea,
+select {
+  background-color: var(--input);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* -------------------------------
+   Utility classes
+--------------------------------*/
+.bg-background { background-color: var(--background); }
+.text-foreground { color: var(--foreground); }
+.bg-card { background-color: var(--card); }
+.text-muted-foreground { color: var(--muted-foreground); }
+.bg-primary { background-color: var(--primary); }
+.text-primary-foreground { color: var(--primary-foreground); }
+
+/* -------------------------------
+   Additional spacing / layouts
+--------------------------------*/
+.container {
+  max-width: 6xl;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.rounded-xl {
+  border-radius: var(--radius-xl);
+}
+
+.rounded-lg {
+  border-radius: var(--radius-lg);
+}
+
+.rounded-md {
+  border-radius: var(--radius-md);
+}
+
+.rounded-sm {
+  border-radius: var(--radius-sm);
+}
+
+.shadow-md {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.shadow-sm {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* -------------------------------
+   Typography
+--------------------------------*/
+.text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+.text-2xl { font-size: 1.5rem; line-height: 2rem; }
+.text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+.font-bold { font-weight: 700; }
+.font-semibold { font-weight: 600; }
+.leading-relaxed { line-height: 1.625; }
+
+/* -------------------------------
+   Grid and Flex
+--------------------------------*/
+.grid { display: grid; }
+.grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+.md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+.flex { display: flex; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.space-x-2 > :not([hidden]) ~ :not([hidden]) { margin-left: 0.5rem; }
+.space-x-3 > :not([hidden]) ~ :not([hidden]) { margin-left: 0.75rem; }
+.space-x-6 > :not([hidden]) ~ :not([hidden]) { margin-left: 1.5rem; }
+
+/* -------------------------------
+   Misc
+--------------------------------*/
+.transition-colors { transition-property: background-color, border-color, color, fill, stroke; transition-duration: 0.2s; }
+.max-w-2xl { max-width: 42rem; }
+.max-w-6xl { max-width: 72rem; }
+.px-4 { padding-left: 1rem; padding-right: 1rem; }
+.py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+.py-6 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+.py-8 { padding-top: 2rem; padding-bottom: 2rem; }
+.mb-3 { margin-bottom: 0.75rem; }
+.mb-4 { margin-bottom: 1rem; }
+.mb-6 { margin-bottom: 1.5rem; }
+.mb-8 { margin-bottom: 2rem; }
+.mt-6 { margin-top: 1.5rem; }
