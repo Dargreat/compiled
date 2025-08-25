@@ -8,6 +8,7 @@ import { getUserByEmail } from "@/data/user";
 import { sendVerificationEmail } from "@/lib/mail";
 import { generateVerificationToken } from "@/lib/token";
 import { redirect } from "next/navigation";
+import { AuthError } from "next-auth";
 
 const ERROR_MESSAGES = {
   INVALID_FIELDS: "Invalid fields!",
@@ -19,7 +20,7 @@ const ERROR_MESSAGES = {
 
 export const login = async (values: z.infer<typeof LoginSchema>, callbackUrl?: string | null) => {
   const validatedFields = LoginSchema.safeParse(values);
-  
+
   if (!validatedFields.success) {
     return { error: ERROR_MESSAGES.INVALID_FIELDS };
   }
@@ -43,25 +44,23 @@ export const login = async (values: z.infer<typeof LoginSchema>, callbackUrl?: s
   }
 
   try {
-    const result = await signIn("credentials", { 
-      email, 
+    await signIn("credentials", {
+      email,
       password,
-      redirect: false, // Prevents automatic redirect
+      redirectTo: callbackUrl || "/", // Directs the user on successful login
     });
-
-    // The redirect will not be reached if the sign-in fails
-    // or if the `signIn` call itself throws an error.
-    if (result && !result.ok) {
-      return { error: result?.error || ERROR_MESSAGES.SOMETHING_WENT_WRONG };
-    }
-
   } catch (error) {
-    // This catch block will only handle other unexpected errors.
-    console.error("Login failed:", error);
-    return { error: ERROR_MESSAGES.SOMETHING_WENT_WRONG };
+    // This is where we catch and handle login errors.
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return { error: ERROR_MESSAGES.INVALID_CREDENTIALS };
+        default:
+          return { error: ERROR_MESSAGES.SOMETHING_WENT_WRONG };
+      }
+    }
+    // This is the special case for the 'redirect' error thrown by Next.js.
+    // We re-throw it so Next.js can handle the redirect.
+    throw error;
   }
-  
-  // 🔑 Key Fix: The redirect should happen here, outside the try/catch.
-  // This ensures the redirect error is not caught and is handled by Next.js.
-  redirect(callbackUrl || "/");
 };
