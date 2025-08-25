@@ -1,118 +1,195 @@
 "use client";
 
-import Link from "next/link";
-import { SearchBar } from "@/components/SearchBar";
-import { SubredditCard } from "@/components/SubredditCard";
-import { useRedditSearch } from "@/hooks/useRedditSearch";
-import { MessageSquare, TrendingUp, Search as SearchIcon } from "lucide-react";
+import { useState } from "react";
+import { Search, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
-const Index = () => {
-  const { subreddits, isLoading, hasSearched, searchSubreddits } = useRedditSearch();
+interface Subreddit {
+  id: string;
+  name: string;
+  description: string;
+}
+
+interface SearchBarProps {
+  onSearch: (query: string) => void;
+  isLoading: boolean;
+}
+
+const SearchBar = ({ onSearch, isLoading }: SearchBarProps) => {
+  const [query, setQuery] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (query.trim()) onSearch(query.trim());
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") handleSubmit(e);
+  };
 
   return (
-    <div className="min-h-screen bg-pink-100 text-black">
-      {/* Header / Upper section */}
-      <header className="bg-pink-50 border-b border-border/50 shadow-sm">
-        <div className="max-w-6xl mx-auto px-4 py-6">
-          <div className="flex items-center justify-center space-x-3 mb-8">
-            <div className="p-3 bg-gradient-to-r from-red-600 to-red-700 rounded-full shadow-md">
-              <MessageSquare className="w-8 h-8 text-white" />
-            </div>
-            <div className="text-center">
-              <h1 className="text-3xl font-bold text-black">
-                Reddit Sub Finder
-              </h1>
-              <p className="text-gray-700 mt-1">
-                Discover subreddits by searching keywords
-              </p>
-            </div>
-          </div>
-
-          {/* Search Bar */}
-          <SearchBar 
-            onSearch={searchSubreddits} 
-            isLoading={isLoading} 
-            className="bg-red-600 text-white hover:bg-red-700 border-none"
+    <div style={{ width: "100%", maxWidth: "32rem", margin: "0 auto" }}>
+      <form onSubmit={handleSubmit} style={{ position: "relative" }}>
+        <div style={{ position: "relative" }}>
+          <Input
+            type="text"
+            placeholder="Search for subreddits..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyPress={handleKeyPress}
+            disabled={isLoading}
+            style={{
+              width: "100%",
+              height: "3.5rem",
+              paddingLeft: "3rem",
+              paddingRight: "6rem",
+              fontSize: "1.125rem",
+              borderWidth: "2px",
+              borderColor: "#d1d5db",
+              borderRadius: "1rem",
+              backgroundColor: "#ffffff",
+              boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
+            }}
           />
-
-          {/* Home Button */}
-          <div className="mt-6 text-center">
-            <Link
-              href="/"
-              className="inline-block px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors"
-            >
-              Home
-            </Link>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="max-w-6xl mx-auto px-4 py-8">
-        {!hasSearched && (
-          <div className="text-center py-16">
-            <div className="max-w-2xl mx-auto">
-              <div className="p-6 bg-white rounded-2xl shadow-md border border-gray-300 mb-8">
-                <SearchIcon className="w-16 h-16 text-red-600 mx-auto mb-4" />
-                <h2 className="text-2xl font-semibold text-black mb-3">
-                  Find Your Community
-                </h2>
-                <p className="text-gray-700 leading-relaxed mb-6">
-                  Search for subreddits using keywords related to your interests.
-                  Find communities discussing topics you care about, from technology
-                  and gaming to hobbies and lifestyle.
-                </p>
-                <div className="flex items-center justify-center space-x-6 text-sm text-gray-700">
-                  <div className="flex items-center space-x-2">
-                    <TrendingUp className="w-4 h-4 text-red-600" />
-                    <span>Popular communities</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <MessageSquare className="w-4 h-4 text-red-600" />
-                    <span>Real Reddit data</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Results */}
-        {hasSearched && (
-          <div>
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-black">
-                {isLoading ? (
-                  "Searching subreddits..."
-                ) : subreddits.length > 0 ? (
-                  `Found ${subreddits.length} subreddit${subreddits.length !== 1 ? "s" : ""}`
-                ) : (
-                  "No subreddits found"
-                )}
-              </h2>
-            </div>
-
-            {subreddits.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {subreddits.map((subreddit) => (
-                  <div key={subreddit.display_name} className="bg-white rounded-2xl shadow-md p-4 flex flex-col justify-between">
-                    <SubredditCard subreddit={subreddit} />
-                    <Link
-                      href={`https://www.reddit.com/r/${subreddit.display_name}`}
-                      target="_blank"
-                      className="mt-4 inline-block px-4 py-2 rounded-lg bg-red-600 text-white text-center hover:bg-red-700 transition-colors"
-                    >
-                      Visit
-                    </Link>
-                  </div>
-                ))}
-              </div>
+          <Search
+            style={{
+              position: "absolute",
+              left: "0.75rem",
+              top: "50%",
+              transform: "translateY(-50%)",
+              width: "1.25rem",
+              height: "1.25rem",
+              color: "#6b7280",
+            }}
+          />
+          <Button
+            type="submit"
+            disabled={isLoading || !query.trim()}
+            style={{
+              position: "absolute",
+              right: "0.5rem",
+              top: "50%",
+              transform: "translateY(-50%)",
+              height: "2.5rem",
+              padding: "0 1rem",
+              backgroundColor: "#dc2626",
+              color: "#ffffff",
+              borderRadius: "0.5rem",
+              fontWeight: 500,
+              boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
+            }}
+            onMouseOver={(e) =>
+              ((e.currentTarget as HTMLButtonElement).style.backgroundColor =
+                "#b91c1c")
+            }
+            onMouseOut={(e) =>
+              ((e.currentTarget as HTMLButtonElement).style.backgroundColor =
+                "#dc2626")
+            }
+          >
+            {isLoading ? (
+              <>
+                <Loader2 style={{ width: "1rem", height: "1rem", marginRight: "0.5rem", animation: "spin 1s linear infinite" }} />
+                Searching...
+              </>
+            ) : (
+              "Search"
             )}
-          </div>
-        )}
-      </main>
+          </Button>
+        </div>
+      </form>
     </div>
   );
 };
 
-export default Index;
+const TrackerPage = () => {
+  const [subreddits, setSubreddits] = useState<Subreddit[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const searchSubreddits = async (query: string) => {
+    setIsLoading(true);
+    // Simulate API call
+    setTimeout(() => {
+      setSubreddits([
+        {
+          id: "1",
+          name: `r/${query}Example1`,
+          description: "This is a description for subreddit example 1",
+        },
+        {
+          id: "2",
+          name: `r/${query}Example2`,
+          description: "This is a description for subreddit example 2",
+        },
+      ]);
+      setIsLoading(false);
+    }, 1000);
+  };
+
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "linear-gradient(to bottom, #ffe4e6, #fbcfe8)",
+        padding: "2rem",
+      }}
+    >
+      <h1 style={{ textAlign: "center", color: "#b91c1c", fontSize: "2rem", marginBottom: "2rem" }}>
+        Subreddit Tracker
+      </h1>
+      <SearchBar onSearch={searchSubreddits} isLoading={isLoading} />
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(18rem, 1fr))",
+          gap: "1.5rem",
+          marginTop: "2rem",
+        }}
+      >
+        {subreddits.map((sub) => (
+          <div
+            key={sub.id}
+            style={{
+              backgroundColor: "#ffffff",
+              color: "#000000",
+              padding: "1.5rem",
+              borderRadius: "1rem",
+              boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+            }}
+          >
+            <h2 style={{ fontSize: "1.25rem", fontWeight: 600 }}>{sub.name}</h2>
+            <p style={{ marginTop: "0.5rem", flexGrow: 1 }}>{sub.description}</p>
+            <button
+              style={{
+                marginTop: "1rem",
+                padding: "0.5rem 1rem",
+                backgroundColor: "#dc2626",
+                color: "#ffffff",
+                border: "none",
+                borderRadius: "0.5rem",
+                fontWeight: 500,
+                cursor: "pointer",
+              }}
+              onMouseOver={(e) =>
+                ((e.currentTarget as HTMLButtonElement).style.backgroundColor =
+                  "#b91c1c")
+              }
+              onMouseOut={(e) =>
+                ((e.currentTarget as HTMLButtonElement).style.backgroundColor =
+                  "#dc2626")
+              }
+            >
+              Visit
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default TrackerPage;
