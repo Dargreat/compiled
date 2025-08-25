@@ -123,7 +123,7 @@ const AccountsPage = () => {
       {/* Top bar with button */}
       <div className="flex items-center justify-between py-5 px-4">
         <Button
-          onClick={() => router.push('/tracker/page')}
+          onClick={() => router.push('/tracker')}
           className="bg-red-600 hover:bg-red-700 text-white"
         >
           Subreddit Tracker
