@@ -109,7 +109,8 @@ const Index = () => {
                       border: "1px solid rgba(0,0,0,0.1)",
                     }}
                   >
-                    <SubredditCard subreddit={subreddit} visitButtonStyle={{ backgroundColor: "#ef4444", color: "#fff", border: "none" }} />
+                    {/* SubredditCard with hardcoded red button */}
+                    <SubredditCard subreddit={subreddit} />
                   </div>
                 ))}
               </div>
