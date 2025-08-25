@@ -234,10 +234,6 @@ body,
    Base layer overrides
 --------------------------------*/
 @layer base {
-  * {
-    @apply border border-border ring ring-1 ring-opacity-50;
-  }
-
   body {
     @apply bg-background text-foreground;
   }
