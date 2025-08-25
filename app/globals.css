@@ -7,7 +7,6 @@
 --------------------------------*/
 
 
-
 /* -------------------------------
    Global height
 --------------------------------*/
@@ -69,12 +68,17 @@ body,
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+---
+
+### Edited Light Theme Variables
+
+```css
 /* -------------------------------
    Base: HSL fallback
 --------------------------------*/
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 210 40% 98%; /* Changed from pure white */
     --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
@@ -136,13 +140,18 @@ body,
   }
 }
 
+---
+
+### Edited OKLCH Variables
+
+```css
 /* -------------------------------
    Primary: OKLCH variables
 --------------------------------*/
 :root {
   --radius: 0.625rem;
 
-  --background: oklch(1 0 0);
+  --background: oklch(0.97 0 0); /* Changed from pure white */
   --foreground: oklch(0.145 0 0);
 
   --card: oklch(1 0 0);
