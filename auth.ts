@@ -42,9 +42,9 @@ declare module "@auth/core/adapters" {
     role: UserRole;
     firstName?: string | null;
     lastName?: string | null;
-    // Remove the optional '?' modifier here
     emailVerified: Date | null;
-    isTwoFactorEnabled?: boolean;
+    // Remove the optional '?' modifier here
+    isTwoFactorEnabled: boolean;
   }
 }
 
