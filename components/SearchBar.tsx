@@ -64,11 +64,14 @@ export const SearchBar = ({ onSearch, isLoading }: SearchBarProps) => {
             transform: "translateY(-50%)",
             height: "2.5rem",
             padding: "0 1rem",
-            backgroundColor: "#ef4444", // hardcoded red
-            color: "#fff", // white text
+            backgroundColor: "#ef4444",
+            color: "#fff",
             border: "none",
             borderRadius: "0.5rem",
             cursor: isLoading || !query.trim() ? "not-allowed" : "pointer",
+            display: "flex", // Use flexbox for alignment
+            alignItems: "center", // Align items vertically
+            justifyContent: "center", // Center items horizontally
           }}
         >
           {isLoading ? (
