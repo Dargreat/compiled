@@ -126,7 +126,9 @@ body,
     @apply bg-background text-foreground font-sans;
   }
 
-  /* Buttons: always red, hover darker red */
+  /* -------------------------------
+     Buttons
+  --------------------------------*/
   button {
     background-color: hsl(350, 70%, 50%) !important;
     color: hsl(340, 100%, 98%) !important;
@@ -140,6 +142,17 @@ body,
 
   button:hover {
     background-color: hsl(350, 70%, 40%) !important;
+  }
+
+  /* Special white buttons */
+  .btn-white {
+    background-color: hsl(0, 0%, 100%) !important;
+    color: hsl(340, 80%, 10%) !important;
+    border: 1px solid hsl(340, 90%, 85%);
+  }
+
+  .btn-white:hover {
+    background-color: hsl(340, 100%, 95%) !important;
   }
 
   /* Cards */
@@ -178,5 +191,10 @@ body,
 
   a:hover {
     color: hsl(350, 70%, 50%);
+  }
+
+  /* Tracker page background */
+  .tracker-page {
+    background-color: hsl(340, 100%, 98%);
   }
 }
