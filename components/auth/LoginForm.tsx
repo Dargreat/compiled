@@ -7,7 +7,7 @@ import FormError from "../common/FormError";
 import FormSuccess from "../common/FormSuccess";
 import { login } from "@/actions/login";
 import { useState, useTransition } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import CardWrapper from "./CardWrapper";
 import { useForm } from "react-hook-form";
@@ -23,17 +23,16 @@ import {
 } from "../ui/form";
 
 const LoginForm = () => {
-  const router = useRouter(); // Initialize router here
   const searchParams = useSearchParams();
   const urLError =
     searchParams.get("error") === "OAuthAccountNotLinked"
       ? "Email Already in Use with a Different Provider"
       : "";
-
+  
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>();
   const [success, setSuccess] = useState<string | undefined>();
-
+  
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -41,32 +40,42 @@ const LoginForm = () => {
       password: "",
     },
   });
-
+  
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
     setError("");
     setSuccess("");
-
+    
     startTransition(() => {
       login(values)
-        .then((data) => {
-          if (data?.error) {
-            form.reset();
-            setError(data?.error);
+      .then((data) => {
+        // This block will only be executed if the login action returns an object,
+        // which means the redirect did NOT happen (due to an error or success message).
+        
+        if (data?.error) {
+          form.reset();
+          setError(data.error);
+        }
+        
+        if (data?.success) {
+          form.reset();
+          setSuccess(data.success);
+        }
+      })
+      .catch((error) => {
+          // This catch block handles the error thrown by the `redirect` function
+          // when a login is successful. The `error` object will contain a `digest`
+          // property used by Next.js to handle the redirect.
+          if (error && error.digest && error.digest.includes("NEXT_REDIRECT")) {
+            // This is the expected behavior for a successful redirect.
+            // The Next.js router will handle the navigation automatically.
+            return;
           }
-
-          if (data?.success) {
-            form.reset();
-            setSuccess(data?.success);
-          }
-
-          if (data?.success && data?.redirectUrl) {
-            router.push(data.redirectUrl);
-          }
-        })
-        .catch(() => setError("Something went wrong"));
+          // For all other errors
+          setError("Something went wrong");
+      });
     });
   };
-
+  
   return (
     <div className="text-slate-50 w-full max-w-md mx-auto">
       <CardWrapper
