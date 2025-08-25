@@ -36,13 +36,14 @@ declare module "next-auth/jwt" {
   }
 }
 
-// Add this new module augmentation to define the custom fields for the adapter
+// Correct the module augmentation for the adapter
 declare module "@auth/core/adapters" {
   interface AdapterUser {
     role: UserRole;
     firstName?: string | null;
     lastName?: string | null;
-    emailVerified?: Date | null;
+    // Remove the optional '?' modifier here
+    emailVerified: Date | null;
     isTwoFactorEnabled?: boolean;
   }
 }
@@ -61,8 +62,6 @@ export const {
     signIn: "/auth/login",
     error: "/auth/error",
   },
-  // Ensure that all adapters are using the same type definition.
-  // Casting is a temporary fix, but augmenting the AdapterUser is the proper solution.
   adapter: PrismaAdapter(db) as Adapter,
   session: { strategy: "jwt" },
   events: {
