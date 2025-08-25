@@ -1,6 +1,13 @@
+/* -------------------------------
+   Tailwind directives
+--------------------------------*/
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* -------------------------------
+   Imports (if any)
+--------------------------------*/
 
 /* -------------------------------
    Global height
@@ -64,7 +71,7 @@ body,
 }
 
 /* -------------------------------
-   Base: HSL fallback
+   Light/Dark HSL Variables
 --------------------------------*/
 @layer base {
   :root {
@@ -131,7 +138,7 @@ body,
 }
 
 /* -------------------------------
-   Primary: OKLCH variables
+   OKLCH Variables
 --------------------------------*/
 :root {
   --radius: 0.625rem;
@@ -228,7 +235,7 @@ body,
 --------------------------------*/
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border border-border ring ring-1 ring-opacity-50;
   }
 
   body {
