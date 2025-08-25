@@ -80,9 +80,7 @@ export const SubredditCard = ({ subreddit }: SubredditCardProps) => {
           </div>
           <Button
             onClick={handleVisitSubreddit}
-            variant="outline"
-            size="sm"
-            className="shrink-0 hover:bg-primary hover:text-primary-foreground transition-colors"
+            className="shrink-0 transition-colors bg-red-600 text-white hover:bg-red-700"
           >
             <ExternalLink className="w-4 h-4 mr-1" />
             Visit
