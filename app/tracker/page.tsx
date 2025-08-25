@@ -11,11 +11,11 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-pink-100 text-black">
-      {/* Header */}
-      <header className="bg-pink-200 border-b border-pink-300 shadow-sm rounded-b-xl">
+      {/* Header / Upper section */}
+      <header className="bg-pink-50 border-b border-border/50 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 py-6">
           <div className="flex items-center justify-center space-x-3 mb-8">
-            <div className="p-3 bg-red-500 rounded-full shadow-md">
+            <div className="p-3 bg-gradient-to-r from-red-600 to-red-700 rounded-full shadow-md">
               <MessageSquare className="w-8 h-8 text-white" />
             </div>
             <div className="text-center">
@@ -29,7 +29,11 @@ const Index = () => {
           </div>
 
           {/* Search Bar */}
-          <SearchBar onSearch={searchSubreddits} isLoading={isLoading} />
+          <SearchBar 
+            onSearch={searchSubreddits} 
+            isLoading={isLoading} 
+            className="bg-red-600 text-white hover:bg-red-700 border-none"
+          />
 
           {/* Home Button */}
           <div className="mt-6 text-center">
@@ -48,7 +52,7 @@ const Index = () => {
         {!hasSearched && (
           <div className="text-center py-16">
             <div className="max-w-2xl mx-auto">
-              <div className="p-6 bg-pink-200 rounded-2xl shadow-md border border-pink-300 mb-8">
+              <div className="p-6 bg-white rounded-2xl shadow-md border border-gray-300 mb-8">
                 <SearchIcon className="w-16 h-16 text-red-600 mx-auto mb-4" />
                 <h2 className="text-2xl font-semibold text-black mb-3">
                   Find Your Community
@@ -91,10 +95,16 @@ const Index = () => {
             {subreddits.length > 0 && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {subreddits.map((subreddit) => (
-                  <SubredditCard
-                    key={subreddit.display_name}
-                    subreddit={subreddit}
-                  />
+                  <div key={subreddit.display_name} className="bg-white rounded-2xl shadow-md p-4 flex flex-col justify-between">
+                    <SubredditCard subreddit={subreddit} />
+                    <Link
+                      href={`https://www.reddit.com/r/${subreddit.display_name}`}
+                      target="_blank"
+                      className="mt-4 inline-block px-4 py-2 rounded-lg bg-red-600 text-white text-center hover:bg-red-700 transition-colors"
+                    >
+                      Visit
+                    </Link>
+                  </div>
                 ))}
               </div>
             )}
