@@ -12,6 +12,8 @@ export const useRedditSearch = () => {
   const searchSubreddits = async (query: string) => {
     setIsLoading(true);
     setHasSearched(true);
+    // ⭐️ Fix: Clear previous results at the start of the search
+    setSubreddits([]); 
     
     try {
       // Try multiple approaches for better reliability
