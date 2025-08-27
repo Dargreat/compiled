@@ -4,93 +4,105 @@ import Link from "next/link";
 import { SearchBar } from "@/components/SearchBar";
 import { SubredditCard } from "@/components/SubredditCard";
 import { useRedditSearch } from "@/hooks/useRedditSearch";
-import { MessageSquare, TrendingUp, Search as SearchIcon } from "lucide-react";
+import { MessageSquare, Search as SearchIcon } from "lucide-react";
 
-const Index = () => {
-  const { subreddits, isLoading, hasSearched } = useRedditSearch();
+const TrackerPage = () => {
+  const { subreddits, isLoading, hasSearched, searchSubreddits } =
+    useRedditSearch();
 
   return (
     <div
-      className="min-h-screen flex flex-col items-center"
+      className="min-h-screen flex flex-col"
       style={{
-        backgroundColor: "#fdeef3", // inline background (matches main page light pink)
-        fontFamily: "Arial, Helvetica, sans-serif", // inline font
+        backgroundColor: "#ffeef2", // inline background (light pink)
+        fontFamily: "'Inter', sans-serif",
+        color: "#1a1a1a",
       }}
     >
-      {/* Top navigation bar */}
-      <div className="w-full flex justify-between items-center p-4">
-        <Link
-          href="/"
-          className="px-4 py-2 rounded-xl font-bold"
-          style={{
-            backgroundColor: "#e02424", // 🔴 restore red background for Home button
-            color: "white",
-          }}
-        >
-          Home
-        </Link>
-      </div>
+      {/* Header */}
+      <header className="w-full shadow-sm border-b border-gray-200 bg-white">
+        <div className="max-w-4xl mx-auto p-6 flex flex-col items-center">
+          {/* Title */}
+          <div className="flex flex-col sm:flex-row items-center gap-3 mb-6 text-center sm:text-left">
+            <div className="p-3 rounded-full shadow bg-red-600">
+              <MessageSquare className="w-8 h-8 text-white" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold">Reddit Sub Finder</h1>
+              <p className="text-gray-600 mt-1">
+                Discover subreddits by searching keywords
+              </p>
+            </div>
+          </div>
 
-      {/* Header with icon and text */}
-      <div className="flex flex-col items-center text-center mt-6">
-        <MessageSquare
-          className="w-12 h-12 mb-3"
-          style={{ color: "#e02424" }} // 🔴 red chat bubble icon
-        />
-        <h1 className="text-3xl font-bold" style={{ color: "#111" }}>
-          Reddit Sub Finder
-        </h1>
-        <p className="text-base mt-1" style={{ color: "#333" }}>
-          Find Your Community
-        </p>
-      </div>
+          {/* Search Bar */}
+          <div className="w-full max-w-lg">
+            <SearchBar
+              onSearch={searchSubreddits}
+              isLoading={isLoading}
+              iconColor="text-red-600" // 🔴 restored red search icon
+              buttonColor="bg-red-600 hover:bg-red-700"
+              textColor="text-white"
+            />
+          </div>
 
-      {/* Search section */}
-      <div className="w-full max-w-lg px-4 mt-8">
-        <div className="flex items-center border rounded-xl bg-white p-2">
-          <SearchIcon
-            className="w-6 h-6 mr-2"
-            style={{ color: "#e02424" }} // 🔴 restore red search icon
-          />
-          <SearchBar />
+          {/* Home Button */}
+          <div className="mt-6">
+            <Link
+              href="/"
+              className="inline-block rounded-md bg-red-600 text-white px-4 py-2 font-medium hover:bg-red-700 transition"
+            >
+              Home
+            </Link>
+          </div>
         </div>
-      </div>
+      </header>
 
-      {/* Results */}
-      <div
-        className="w-full max-w-4xl px-4 mt-8 rounded-2xl p-6"
-        style={{ backgroundColor: "#fbdde9" }} // slightly darker pink for results section
-      >
-        {isLoading && <p>Loading results...</p>}
-
-        {!isLoading && hasSearched && subreddits.length === 0 && (
-          <p>No results found.</p>
-        )}
-
-        {!isLoading && subreddits.length > 0 && (
-          <div className="grid gap-4">
-            {subreddits.map((subreddit) => (
-              <SubredditCard key={subreddit.id} subreddit={subreddit} />
-            ))}
+      {/* Main Content */}
+      <main className="flex-1 max-w-4xl mx-auto p-8 w-full">
+        {/* Empty state */}
+        {!hasSearched && (
+          <div className="text-center py-16">
+            <SearchIcon className="w-16 h-16 text-red-600 mx-auto mb-4" />
+            <h2 className="text-xl font-semibold mb-3">Find Your Community</h2>
+            <p className="text-gray-600 leading-relaxed max-w-lg mx-auto">
+              Search for subreddits using keywords related to your interests.
+              Find communities discussing topics you care about — from
+              technology and gaming to hobbies and lifestyle.
+            </p>
           </div>
         )}
-      </div>
 
-      {/* Footer */}
-      <div className="mt-12 text-center">
-        <TrendingUp
-          className="w-6 h-6 mx-auto mb-2"
-          style={{ color: "#e02424" }} // 🔴 red trending up icon
-        />
-        <h2 className="text-xl font-bold" style={{ color: "#111" }}>
-          Popular communities
-        </h2>
-        <p className="text-sm mt-1" style={{ color: "#333" }}>
-          Real Reddit data
-        </p>
-      </div>
+        {/* Results */}
+        {hasSearched && (
+          <div className="mt-6">
+            <h2 className="text-lg font-semibold mb-6">
+              {isLoading
+                ? "Searching subreddits..."
+                : subreddits.length > 0
+                ? `Found ${subreddits.length} subreddit${
+                    subreddits.length !== 1 ? "s" : ""
+                  }`
+                : "No subreddits found"}
+            </h2>
+
+            {subreddits.length > 0 && (
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {subreddits.map((subreddit) => (
+                  <div
+                    key={subreddit.display_name}
+                    className="bg-white rounded-xl shadow p-4"
+                  >
+                    <SubredditCard subreddit={subreddit} />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+      </main>
     </div>
   );
 };
 
-export default Index;
+export default TrackerPage;
