@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { getRedditAccounts } from '@/app/actions/datadisplay';
@@ -30,15 +31,15 @@ const AccountsPage = () => {
   const [lastFetchTime, setLastFetchTime] = useState(0);
   const itemsPerPage = 3;
   const router = useRouter();
-  
+
   const fetchAccounts = useCallback(async () => {
     const now = Date.now();
     if (now - lastFetchTime < 1000) return;
-    
+
     setIsLoading(true);
     setError(null);
     setLastFetchTime(now);
-    
+
     try {
       const result = await getRedditAccounts();
       if (result.error) {
@@ -57,29 +58,29 @@ const AccountsPage = () => {
       setIsLoading(false);
     }
   }, [lastFetchTime]);
-  
+
   useEffect(() => {
     fetchAccounts();
   }, [fetchAccounts]);
-  
+
   useEffect(() => {
     const pollInterval = setInterval(() => {
       fetchAccounts();
     }, accounts.length === 0 ? 15000 : 5000);
-    
+
     return () => clearInterval(pollInterval);
   }, [fetchAccounts, accounts.length]);
-  
+
   const handleAccountAdded = useCallback(() => {
     fetchAccounts();
     router.refresh();
   }, [fetchAccounts, router]);
-  
+
   const totalPages = Math.ceil(accounts.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const displayedAccounts = accounts.slice(startIndex, startIndex + itemsPerPage);
   const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
-  
+
   const handleLogout = async () => {
     try {
       await signOut({ redirect: false });
@@ -89,7 +90,7 @@ const AccountsPage = () => {
       setError('Failed to sign out. Please try again.');
     }
   };
-  
+
   if (error) {
     return (
       <div className="min-h-screen bg-red-50 p-4 flex items-center justify-center">
@@ -107,7 +108,7 @@ const AccountsPage = () => {
       </div>
     );
   }
-  
+
   if (isLoading && accounts.length === 0) {
     return (
       <div className="min-h-screen bg-red-50 p-4 flex items-center justify-center">
@@ -117,20 +118,29 @@ const AccountsPage = () => {
       </div>
     );
   }
-  
+
   return (
     <div className="min-h-screen bg-red-50 rounded-xl">
-      {/* Top bar with button */}
-      <div className="flex items-center justify-between py-5 px-4">
-        <Button
-          onClick={() => router.push('/tracker')}
-          className="bg-red-600 hover:bg-red-700 text-white"
-        >
-          Subreddit Tracker
-        </Button>
-        <Header label="" />
+      {/* Top bar with button (left) and logo (center) */}
+      <div className="relative flex items-center justify-center py-5 px-4">
+        {/* Button far left */}
+        <div className="absolute left-4">
+          <Button
+            onClick={() => router.push('/tracker')}
+            className="bg-red-600 hover:bg-red-700 text-white font-bold font-sans 
+                       text-sm sm:text-base px-2 py-1 sm:px-4 sm:py-2"
+          >
+            Subreddit Tracker
+          </Button>
+        </div>
+
+        {/* Centered responsive logo */}
+        <div className="w-28 sm:w-40">
+          <Header label="" />
+        </div>
       </div>
 
+      {/* Accounts content */}
       <div className="p-4 sm:p-3 lg:p-4">
         <div className="mx-auto max-w-lg sm:max-w-xl lg:max-w-2xl">
           <div className="mb-2 flex items-center justify-between">
@@ -139,7 +149,7 @@ const AccountsPage = () => {
             </h1>
             <AddAccountModal onAccountAdded={handleAccountAdded} />
           </div>
-          
+
           {accounts.length === 0 ? (
             <div className="bg-white p-6 rounded-lg shadow-sm text-center">
               <p className="text-gray-600">
@@ -164,34 +174,34 @@ const AccountsPage = () => {
               ))}
             </div>
           )}
-          
+
           {accounts.length > itemsPerPage && (
             <div className="mt-6">
               <div className="flex flex-wrap items-center justify-center gap-2">
                 <Button
-                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                   disabled={currentPage === 1}
                   variant="outline"
                   className="px-3 py-2"
                 >
                   Previous
                 </Button>
-                
+
                 <div className="flex flex-wrap gap-1">
                   {pageNumbers.map((pageNumber) => (
                     <Button
                       key={pageNumber}
                       onClick={() => setCurrentPage(pageNumber)}
-                      variant={currentPage === pageNumber ? "default" : "outline"}
+                      variant={currentPage === pageNumber ? 'default' : 'outline'}
                       className={currentPage === pageNumber ? 'bg-red-600' : ''}
                     >
                       {pageNumber}
                     </Button>
                   ))}
                 </div>
-                
+
                 <Button
-                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                   disabled={currentPage === totalPages}
                   variant="outline"
                   className="px-3 py-2"
@@ -201,7 +211,7 @@ const AccountsPage = () => {
               </div>
             </div>
           )}
-          
+
           <div className="mt-6 flex justify-center">
             <Button
               onClick={handleLogout}
