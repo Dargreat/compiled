@@ -4,112 +4,73 @@ import Link from "next/link";
 import { SearchBar } from "@/components/SearchBar";
 import { SubredditCard } from "@/components/SubredditCard";
 import { useRedditSearch } from "@/hooks/useRedditSearch";
-import { MessageSquare, Search as SearchIcon } from "lucide-react";
+import { MessageSquare, TrendingUp, Search as SearchIcon } from "lucide-react";
 
 const TrackerPage = () => {
-  const { subreddits, isLoading, hasSearched, searchSubreddits } =
-    useRedditSearch();
+  const { subreddits, isLoading, hasSearched, searchReddit } = useRedditSearch();
 
   return (
     <div
-      className="min-h-screen flex flex-col"
+      className="min-h-screen flex flex-col items-center px-4 py-8"
       style={{
-        backgroundColor: "#ffeef2", // inline background
-        fontFamily: "'Inter', sans-serif",
-        color: "#1a1a1a",
+        backgroundColor: "#ffeef2", // inline same pink background as main page
+        fontFamily: "'Inter', sans-serif", // match main page font
       }}
     >
       {/* Header */}
-      <header
-        className="w-full shadow-sm border-b border-gray-200"
-        style={{ backgroundColor: "#fff" }}
-      >
-        <div className="max-w-4xl mx-auto p-6 flex flex-col items-center">
-          {/* Title */}
-          <div className="flex flex-col sm:flex-row items-center gap-3 mb-6 text-center sm:text-left">
-            <div className="p-3 rounded-full shadow" style={{ backgroundColor: "#dc2626" }}>
-              <MessageSquare className="w-8 h-8 text-white" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold">Reddit Sub Finder</h1>
-              <p className="mt-1" style={{ color: "#4b5563" }}>
-                Discover subreddits by searching keywords
-              </p>
-            </div>
-          </div>
-
-          {/* Search Bar */}
-          <div className="w-full max-w-lg">
-            <div className="flex items-center gap-2">
-              <SearchBar onSearch={searchSubreddits} isLoading={isLoading} />
-              {/* Inline red button */}
-              <button
-                type="submit"
-                className="px-4 py-2 rounded-md text-white font-medium transition"
-                style={{ backgroundColor: "#dc2626" }}
-              >
-                Go
-              </button>
-            </div>
-          </div>
-
-          {/* Home Button */}
-          <div className="mt-6">
-            <Link
-              href="/"
-              className="inline-block rounded-md px-4 py-2 font-medium transition"
-              style={{ backgroundColor: "#dc2626", color: "#fff" }}
-            >
-              Home
-            </Link>
-          </div>
+      <div className="w-full flex items-center justify-between mb-8 max-w-4xl">
+        <Link
+          href="/"
+          className="text-red-600 font-bold text-lg sm:text-xl md:text-2xl"
+        >
+          Home
+        </Link>
+        <div className="flex items-center space-x-2">
+          <MessageSquare className="text-red-600 w-6 h-6" />
+          <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900">
+            Reddit Sub Finder
+          </h1>
         </div>
-      </header>
+      </div>
 
-      {/* Main Content */}
-      <main className="flex-1 max-w-4xl mx-auto p-8 w-full">
-        {/* Empty state */}
-        {!hasSearched && (
-          <div className="text-center py-16">
-            <SearchIcon className="w-16 h-16 mx-auto mb-4" style={{ color: "#dc2626" }} />
-            <h2 className="text-xl font-semibold mb-3">Find Your Community</h2>
-            <p className="leading-relaxed max-w-lg mx-auto" style={{ color: "#4b5563" }}>
-              Search for subreddits using keywords related to your interests. Find communities
-              discussing topics you care about — from technology and gaming to hobbies and
-              lifestyle.
-            </p>
-          </div>
+      {/* Search Section */}
+      <div className="w-full max-w-2xl flex flex-col items-center text-center mb-10">
+        <SearchIcon className="text-red-600 w-10 h-10 mb-3" />
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-2 text-gray-900">
+          Find Your Community
+        </h2>
+        <p className="text-gray-700 mb-6">Discover real Reddit data instantly</p>
+        <SearchBar onSearch={searchReddit} isLoading={isLoading} />
+      </div>
+
+      {/* Results Section */}
+      <div className="w-full max-w-3xl">
+        {isLoading && (
+          <p className="text-center text-gray-600">Searching...</p>
         )}
 
-        {/* Results */}
-        {hasSearched && (
-          <div className="mt-6">
-            <h2 className="text-lg font-semibold mb-6">
-              {isLoading
-                ? "Searching subreddits..."
-                : subreddits.length > 0
-                ? `Found ${subreddits.length} subreddit${
-                    subreddits.length !== 1 ? "s" : ""
-                  }`
-                : "No subreddits found"}
-            </h2>
-
-            {subreddits.length > 0 && (
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {subreddits.map((subreddit) => (
-                  <div
-                    key={subreddit.display_name}
-                    className="rounded-xl shadow p-4"
-                    style={{ backgroundColor: "#fff" }}
-                  >
-                    <SubredditCard subreddit={subreddit} />
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+        {!isLoading && hasSearched && subreddits.length === 0 && (
+          <p className="text-center text-gray-600">
+            No results found. Try another keyword.
+          </p>
         )}
-      </main>
+
+        {!isLoading && subreddits.length > 0 && (
+          <>
+            <div className="flex items-center mb-4">
+              <TrendingUp className="text-red-600 w-5 h-5 mr-2" />
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900">
+                Popular communities
+              </h3>
+            </div>
+            <div className="grid gap-4">
+              {subreddits.map((subreddit) => (
+                <SubredditCard key={subreddit.id} subreddit={subreddit} />
+              ))}
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 };
