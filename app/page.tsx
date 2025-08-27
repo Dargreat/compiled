@@ -121,10 +121,15 @@ const AccountsPage = () => {
 
   return (
     <div className="min-h-screen bg-red-50 rounded-xl">
-      {/* Top bar with button (left) and logo (center) */}
-      <div className="relative flex items-center justify-center py-5 px-4">
-        {/* Button far left */}
-        <div className="absolute left-4">
+      {/* Top bar with responsive layout */}
+      <div className="flex flex-col items-center gap-2 sm:flex-row sm:justify-center sm:relative py-5 px-4">
+        {/* Logo */}
+        <div className="order-1 sm:order-2 w-28 sm:w-40">
+          <Header label="" />
+        </div>
+
+        {/* Button (below logo on mobile, left on desktop) */}
+        <div className="order-2 sm:order-1 sm:absolute sm:left-4">
           <Button
             onClick={() => router.push('/tracker')}
             className="bg-red-600 hover:bg-red-700 text-white font-bold font-sans 
@@ -132,11 +137,6 @@ const AccountsPage = () => {
           >
             Subreddit Tracker
           </Button>
-        </div>
-
-        {/* Centered responsive logo */}
-        <div className="w-28 sm:w-40">
-          <Header label="" />
         </div>
       </div>
 
